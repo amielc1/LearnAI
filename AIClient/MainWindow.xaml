@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AIClient"
         xmlns:viewModels="clr-namespace:AIClient.ViewModels"
         mc:Ignorable="d"
-        Title="AI Chat" Height="450" Width="800">
+        Title="AI Chat" Height="450" Width="791">
     <Window.DataContext>
         <viewModels:MainViewModel />
     </Window.DataContext>
@@ -15,20 +15,81 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ListBox ItemsSource="{Binding Messages}" Grid.Row="0" Margin="0,0,0,10">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical" Margin="0,0,0,8">
-                        <TextBlock Text="{Binding Sender}" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Content}" TextWrapping="Wrap"/>
-                        <TextBlock Text="{Binding Timestamp}" FontSize="10" Foreground="Gray"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <TextBox Text="{Binding UserInput, UpdateSourceTrigger=PropertyChanged}" Width="600" Margin="0,0,10,0"/>
-            <Button Content="Send" Command="{Binding SendCommand}" Width="100"/>
+        <Border Grid.Row="0" Margin="0,0,0,10" Background="White" CornerRadius="8" BorderBrush="#e0e0e1" BorderThickness="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ListBox ItemsSource="{Binding Messages}" BorderThickness="0" Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <!-- User Bubble (Left) -->
+                                <Border
+                    x:Name="UserBubble"
+                    Padding="10"
+                    CornerRadius="12"
+                    Background="#e3f2fd"
+                    BorderBrush="#90caf9"
+                    BorderThickness="1"
+                    Grid.Column="0"
+                    MaxWidth="400"
+                    HorizontalAlignment="Left">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Sender}" Value="You">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Sender}" FontWeight="Bold" Foreground="#1976d2"/>
+                                        <TextBlock Text="{Binding Content}" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                                        <TextBlock Text="{Binding Timestamp}" FontSize="10" Foreground="Gray" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </Border>
+                                <!-- AI Bubble (Right) -->
+                                <Border
+                    x:Name="AIBubble"
+                    Padding="10"
+                    CornerRadius="12"
+                    Background="#fffde7"
+                    BorderBrush="#ffe082"
+                    BorderThickness="1"
+                    Grid.Column="2"
+                    MaxWidth="400"
+                    HorizontalAlignment="Right">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Sender}" Value="AI">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Sender}" FontWeight="Bold" Foreground="Purple"/>
+                                        <TextBlock Text="{Binding Content}" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                                        <TextBlock Text="{Binding Timestamp}" FontSize="10" Foreground="Gray" HorizontalAlignment="Right"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+            </ScrollViewer>
+        </Border>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Background="#fff"  >
+            <TextBox Text="{Binding UserInput, UpdateSourceTrigger=PropertyChanged}" Width="600" MinHeight="36" Margin="0,0,10,0" FontSize="14" VerticalContentAlignment="Center" Padding="8"/>
+            <Button Content="Send" Command="{Binding SendCommand}" Width="100" Height="36" Background="#1976d2" Foreground="White" FontWeight="Bold" BorderBrush="#1976d2" BorderThickness="1" Cursor="Hand"/>
         </StackPanel>
     </Grid>
 </Window>
