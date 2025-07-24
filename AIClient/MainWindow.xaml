@@ -52,7 +52,9 @@
                 BorderThickness="1"
                 Effect="{StaticResource DropShadow}">
 
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ScrollViewer x:Name="MessagesScroller" 
+                          VerticalScrollBarVisibility="Auto" 
+                          HorizontalScrollBarVisibility="Disabled">
                 <ListBox ItemsSource="{Binding Messages}" BorderThickness="0" Background="Transparent">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
