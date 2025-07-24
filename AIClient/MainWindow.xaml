@@ -6,80 +6,150 @@
         xmlns:local="clr-namespace:AIClient"
         xmlns:viewModels="clr-namespace:AIClient.ViewModels"
         mc:Ignorable="d"
-        Title="AI Chat" Height="450" Width="791">
+        Title="AI Chat" Height="650" Width="1000"
+        Background="#f5f5f5">
+
+    <Window.Resources>
+        <DropShadowEffect x:Key="DropShadow" BlurRadius="8" ShadowDepth="2" Opacity="0.2"/>
+        <Style x:Key="CustomButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Window.DataContext>
         <viewModels:MainViewModel />
     </Window.DataContext>
-    <Grid Margin="10">
+
+    <Grid Margin="20">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" Margin="0,0,0,10" Background="White" CornerRadius="8" BorderBrush="#e0e0e1" BorderThickness="1">
+
+        <!-- Header -->
+        <TextBlock Text="AI Chat Assistant" 
+                 FontSize="24" 
+                 FontWeight="SemiBold" 
+                 Margin="0,0,0,20" 
+                 Foreground="#1976d2"/>
+
+        <Border Grid.Row="1" 
+                Margin="0,0,0,20" 
+                Background="White" 
+                CornerRadius="12" 
+                BorderBrush="#e0e0e1" 
+                BorderThickness="1"
+                Effect="{StaticResource DropShadow}">
+
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <ListBox ItemsSource="{Binding Messages}" BorderThickness="0" Background="Transparent">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="0,0,0,8">
+                            <Grid Margin="0,0,0,12" Opacity="0">
+                                <Grid.Triggers>
+                                    <EventTrigger RoutedEvent="Grid.Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation 
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    From="0" To="1" Duration="0:0:0.3">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <CubicEase EasingMode="EaseOut"/>
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Grid.Triggers>
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="40"/>
                                 </Grid.ColumnDefinitions>
-                                <!-- User Bubble (Left) -->
-                                <Border
-                    x:Name="UserBubble"
-                    Padding="10"
-                    CornerRadius="12"
-                    Background="#e3f2fd"
-                    BorderBrush="#90caf9"
-                    BorderThickness="1"
-                    Grid.Column="0"
-                    MaxWidth="400"
-                    HorizontalAlignment="Left">
-                                    <Border.Style>
-                                        <Style TargetType="Border">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Sender}" Value="You">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Border.Style>
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding Sender}" FontWeight="Bold" Foreground="#1976d2"/>
-                                        <TextBlock Text="{Binding Content}" TextWrapping="Wrap" Margin="0,4,0,0"/>
-                                        <TextBlock Text="{Binding Timestamp}" FontSize="10" Foreground="Gray" HorizontalAlignment="Left"/>
-                                    </StackPanel>
-                                </Border>
-                                <!-- AI Bubble (Right) -->
-                                <Border
-                    x:Name="AIBubble"
-                    Padding="10"
-                    CornerRadius="12"
-                    Background="#fffde7"
-                    BorderBrush="#ffe082"
-                    BorderThickness="1"
-                    Grid.Column="2"
-                    MaxWidth="400"
-                    HorizontalAlignment="Right">
-                                    <Border.Style>
-                                        <Style TargetType="Border">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Sender}" Value="AI">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Border.Style>
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding Sender}" FontWeight="Bold" Foreground="Purple"/>
-                                        <TextBlock Text="{Binding Content}" TextWrapping="Wrap" Margin="0,4,0,0"/>
-                                        <TextBlock Text="{Binding Timestamp}" FontSize="10" Foreground="Gray" HorizontalAlignment="Right"/>
-                                    </StackPanel>
-                                </Border>
+
+                                <!-- User Message (Right) -->
+                                <StackPanel Grid.Column="1" Grid.ColumnSpan="2" 
+                                          Orientation="Horizontal" 
+                                          HorizontalAlignment="Right">
+                                    <Border x:Name="UserBubble"
+                                        Padding="12"
+                                        CornerRadius="16"
+                                        Background="#1976d2"
+                                        BorderBrush="#1565c0"
+                                        BorderThickness="1"
+                                        MaxWidth="500"
+                                        Effect="{StaticResource DropShadow}">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Sender}" Value="You">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Content}" 
+                                                     TextWrapping="Wrap" 
+                                                     Foreground="White" 
+                                                     FontSize="15"/>
+                                            <TextBlock Text="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}" 
+                                                     FontSize="10" 
+                                                     Foreground="#B3FFFFFF" 
+                                                     HorizontalAlignment="Right"
+                                                     Margin="0,4,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+
+                                <!-- AI Message (Left) -->
+                                <StackPanel Grid.Column="0" 
+                                          Grid.ColumnSpan="2" 
+                                          Orientation="Horizontal" 
+                                          HorizontalAlignment="Left">
+                                    <Border x:Name="AIBubble"
+                                        Padding="12"
+                                        CornerRadius="16"
+                                        Background="#fffde7"
+                                        BorderBrush="#ffe082"
+                                        BorderThickness="1"
+                                        MaxWidth="500"
+                                        Effect="{StaticResource DropShadow}">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Sender}" Value="AI">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Content}" 
+                                                     TextWrapping="Wrap" 
+                                                     Foreground="#333" 
+                                                     FontSize="15"/>
+                                            <TextBlock Text="{Binding Timestamp, StringFormat='{}{0:HH:mm}'}" 
+                                                     FontSize="10" 
+                                                     Foreground="#888" 
+                                                     HorizontalAlignment="Right"
+                                                     Margin="0,4,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -87,9 +157,47 @@
 
             </ScrollViewer>
         </Border>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Background="#fff"  >
-            <TextBox Text="{Binding UserInput, UpdateSourceTrigger=PropertyChanged}" Width="600" MinHeight="36" Margin="0,0,10,0" FontSize="14" VerticalContentAlignment="Center" Padding="8"/>
-            <Button Content="Send" Command="{Binding SendCommand}" Width="100" Height="36" Background="#1976d2" Foreground="White" FontWeight="Bold" BorderBrush="#1976d2" BorderThickness="1" Cursor="Hand"/>
-        </StackPanel>
+
+
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Background="White" 
+                    CornerRadius="8" 
+                    BorderBrush="#e0e0e1" 
+                    BorderThickness="1"
+                    Effect="{StaticResource DropShadow}">
+                <TextBox Text="{Binding UserInput, UpdateSourceTrigger=PropertyChanged}" 
+                         MinHeight="50" 
+                         Margin="2" 
+                         FontSize="14" 
+                         VerticalContentAlignment="Center" 
+                         Padding="12"
+                         BorderThickness="0"
+                         Background="Transparent"/>
+            </Border>
+            <Button Grid.Column="1" 
+                    Content="Send"
+                    Command="{Binding SendCommand}" 
+                    Style="{StaticResource CustomButtonStyle}"
+                    Width="100" 
+                    Height="50" 
+                    Margin="12,0,0,0"
+                    Background="#1976d2" 
+                    Foreground="White" 
+                    FontWeight="SemiBold" 
+                    BorderThickness="0"   
+                    Cursor="Hand"/>
+
+        </Grid>
+
+
+
     </Grid>
+
+
 </Window>
