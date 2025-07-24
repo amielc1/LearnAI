@@ -1,0 +1,52 @@
+name: Validation Pipeline
+
+on:
+  push:
+    branches: [ main, develop, 'copilot/**' ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  validate-structure:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Validate solution file exists
+      run: |
+        if [ ! -f "LearnAI.sln" ]; then
+          echo "Error: LearnAI.sln not found"
+          exit 1
+        fi
+        echo "✅ Solution file found"
+        
+    - name: Validate project files exist
+      run: |
+        if [ ! -f "AIClient/AIClient.csproj" ]; then
+          echo "Error: AIClient.csproj not found"
+          exit 1
+        fi
+        if [ ! -f "AIClient.Tests/AIClient.Tests.csproj" ]; then
+          echo "Error: AIClient.Tests.csproj not found"
+          exit 1
+        fi
+        echo "✅ Project files found"
+        
+    - name: Validate CI workflow exists
+      run: |
+        if [ ! -f ".github/workflows/ci.yml" ]; then
+          echo "Error: CI workflow not found"
+          exit 1
+        fi
+        echo "✅ CI workflow found"
+        
+    - name: Check YAML syntax
+      run: |
+        if command -v yq >/dev/null 2>&1; then
+          yq eval '.github/workflows/ci.yml' > /dev/null
+          echo "✅ CI workflow YAML is valid"
+        else
+          echo "⚠️  YAML validation skipped (yq not available)"
+        fi

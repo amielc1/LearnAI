@@ -1,0 +1,13 @@
+# Global code owners
+* @amielc1
+
+# Documentation owners
+*.md @amielc1
+docs/ @amielc1
+
+# CI/CD workflow owners
+.github/ @amielc1
+
+# .NET project files
+*.csproj @amielc1
+*.sln @amielc1
