@@ -26,9 +26,7 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Window.DataContext>
-        <viewModels:MainViewModel />
-    </Window.DataContext>
+
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
