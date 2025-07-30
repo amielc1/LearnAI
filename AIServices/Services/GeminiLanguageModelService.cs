@@ -1,3 +1,4 @@
+using AI.Core;
 using AIServices.Interfaces;
 //using Google.Generative.AI;
 using Serilog;
@@ -12,7 +13,10 @@ namespace AIServices.Services
 
         public Task<string> GetResponseAsync(string prompt)
         {
-            //_logger.Information("Sending prompt to Gemini. Length: {PromptLength}", prompt.Length);
+            //ServiceLocator is anti pattern, but its must for lagacy projects !!! 
+            var _logger = ServiceLocator.GetService<ILogger>().ForContext<GeminiLanguageModelService>();
+            _logger.Information("Sending prompt to Gemini. Length: {PromptLength}", prompt.Length);
+
             return Task.FromResult($"Simulated response for prompt: {prompt}");
         }
     }

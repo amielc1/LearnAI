@@ -1,4 +1,5 @@
-﻿using AIClient.ViewModels;
+﻿using AI.Core;
+using AIClient.ViewModels;
 using AIServices.Configuration;
 using AIServices.Interfaces;
 using AIServices.Services;
@@ -44,8 +45,10 @@ namespace AIClient
             services.AddSingleton<ILanguageModelService, GeminiLanguageModelService>();
             
             // Register ViewModels
-            services.AddTransient<MainViewModel>(); 
-            return services.BuildServiceProvider();
+            services.AddTransient<MainViewModel>();
+            var serviceProvider = services.BuildServiceProvider(); 
+            ServiceLocator.Initialize(serviceProvider);
+            return serviceProvider;
         }
 
          static ILogger ConfigureLogging(string seqServerUrl = "http://localhost:5341")
