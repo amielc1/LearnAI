@@ -1,6 +1,5 @@
 ﻿
-using Microsoft.Extensions.DependencyInjection;
-using System;
+using Microsoft.Extensions.DependencyInjection; 
 
 namespace AI.Core;
 public static class ServiceLocator
@@ -13,8 +12,7 @@ public static class ServiceLocator
     }
 
     public static T GetService<T>() where T : notnull
-    {
-        // GetRequiredService יזרוק שגיאה אם השירות לא רשום - וזה טוב.
+    { 
         return Services!.GetRequiredService<T>();
     }
 }
