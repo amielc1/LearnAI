@@ -29,7 +29,7 @@ namespace AIClient.Configuration
         {
             services.AddSingleton<IConfiguration>(configuration);
 
-            services.Configure<LLMSettings>(configuration.GetSection(LLMSettings.SectionName));
+            services.Configure<LLMSettings>(configuration.GetSection(nameof(LLMSettings)));
 
             return services;
         }
