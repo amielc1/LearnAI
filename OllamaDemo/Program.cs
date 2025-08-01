@@ -1,10 +1,19 @@
-﻿using OllamaSharp;
+﻿using Microsoft.Extensions.Configuration;
+using OllamaSharp;
+using OllamaDemo;
 
-var ollama = new OllamaApiClient(new Uri("http://localhost:11434"));
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
 
-ollama.SelectedModel = "llama3.2:3b";
+var settings = configuration.GetSection(nameof(OllamaSettings)).Get<OllamaSettings>()
+    ?? throw new InvalidOperationException("OllamaSettings section is missing in appsettings.json");
+
+var ollama = new OllamaApiClient(new Uri(settings.BaseUrl));
+ollama.SelectedModel = settings.ModelName;
         
-Console.WriteLine("Enter your message for Llama 3.2 model (or 'exit' to quit):");
+Console.WriteLine($"Enter your message for {settings.ModelName} model (or 'exit' to quit):");
 
 while (true)
 {
@@ -23,7 +32,7 @@ while (true)
 
     try
     {
-        Console.Write("\nLlama3.2: ");
+        Console.Write($"\n{settings.ModelName}: ");
         // Sending the request and getting the response in Streaming mode (word by word)
         await foreach (var res in ollama.GenerateAsync(prompt))
         {
