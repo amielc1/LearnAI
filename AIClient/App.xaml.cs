@@ -1,62 +1,45 @@
 ﻿using AI.Core;
+using AIClient.Configuration;
 using AIClient.ViewModels;
-using AIServices.Configuration;
-using AIServices.Interfaces;
-using AIServices.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
+using System.IO;
 using System.Windows;
 
 namespace AIClient
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         private ServiceProvider _serviceProvider;
+        private IConfiguration _configuration;
 
         public App()
         {
-            Services = ConfigureServices();
+            _configuration = ConfigureConfiguration();
+            _serviceProvider = ConfigureServices();
         }
 
-        public ServiceProvider Services { get; }
+        private IConfiguration ConfigureConfiguration()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            return builder.Build();
+        }
 
         private ServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection();
-
-            // Register Configuration
-            var geminiConfig = new GeminiConfig(
-                apiKey: "your-api-key-here", // TODO: Move to configuration
-                modelName: "gemini-pro",
-                temperature: 0.7f,
-                maxTokens: 2048
-            );
-
-            services.AddSingleton<ILanguageModelConfig>(geminiConfig);
-
-            // Register Logger
-            var logger = ConfigureLogging();   
-            services.AddSingleton<ILogger>(logger);
-
-            // Register Services
-            services.AddSingleton<ILanguageModelService, GeminiLanguageModelService>();
             
-            // Register ViewModels
-            services.AddTransient<MainViewModel>();
-            var serviceProvider = services.BuildServiceProvider(); 
+            // Register all application services using the extension method
+            services.AddApplicationServices(_configuration);
+            
+            var serviceProvider = services.BuildServiceProvider();
             ServiceLocator.Initialize(serviceProvider);
             return serviceProvider;
-        }
-
-         static ILogger ConfigureLogging(string seqServerUrl = "http://localhost:5341")
-        {
-            return new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .WriteTo.Seq(seqServerUrl)
-                .CreateLogger();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -65,7 +48,7 @@ namespace AIClient
 
             var mainWindow = new MainWindow
             {
-                DataContext = Services.GetRequiredService<MainViewModel>()
+                DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
             };
 
             mainWindow.Show();
@@ -78,3 +61,4 @@ namespace AIClient
         }
     }
 }
+
