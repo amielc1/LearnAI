@@ -1,0 +1,4 @@
+﻿1.System, Human ,AI  Messages
+2.use chain history (list<message>))
+3.get resonse async 
+4. prompt template
