@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{E0D2F3F3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OllamaDemo", "OllamaDemo\OllamaDemo.csproj", "{0A3CB848-F88D-48C4-B38C-1218FABC11D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangChainDemo", "LangChainDemo\LangChainDemo.csproj", "{08826897-7C16-42D4-A0D5-880CF0774CE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{0A3CB848-F88D-48C4-B38C-1218FABC11D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A3CB848-F88D-48C4-B38C-1218FABC11D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A3CB848-F88D-48C4-B38C-1218FABC11D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08826897-7C16-42D4-A0D5-880CF0774CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08826897-7C16-42D4-A0D5-880CF0774CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08826897-7C16-42D4-A0D5-880CF0774CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08826897-7C16-42D4-A0D5-880CF0774CE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +65,7 @@ Global
 		{7081CBD4-84F0-4FDA-A805-21584BC1585D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{68C5415A-8EBB-40BC-B467-8EEB5B7F3E8A} = {4C306A6E-1C21-4883-B60C-7272DA643829}
 		{0A3CB848-F88D-48C4-B38C-1218FABC11D9} = {E0D2F3F3-EA22-4505-A6CF-3C02C2CAFCD7}
+		{08826897-7C16-42D4-A0D5-880CF0774CE1} = {E0D2F3F3-EA22-4505-A6CF-3C02C2CAFCD7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A1CC5390-36EE-49B9-8798-A5355A8EB69D}
